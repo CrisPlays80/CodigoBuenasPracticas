@@ -1,4 +1,4 @@
-import CodigoBuenasPracticas.producto as pr
+from producto import Producto as pr
 from os import system
 
 def mostrar_menu() -> None:
@@ -16,7 +16,7 @@ def agregar_producto(inventario: list) -> None:
     nombre = input("Ingrese el nombre del producto: ")
     cantidad = int(input("Ingrese la cantidad inicial: "))
     precio = float(input("Ingrese el precio por unidad: "))
-    inventario.append(pr(nombre, cantidad, precio))
+    inventario.append(pr(nombre, precio, cantidad))
     print("Producto agregado exitosamente.")
 
 def quitar_producto(inventario: list) -> None:
@@ -32,6 +32,7 @@ def quitar_producto(inventario: list) -> None:
         print("Producto no encontrado.")
 
 def ver_inventario(inventario: list) -> None:
+    suma = 0
     if len(inventario) == 0:
         print("El inventario está vacío.")
     else:
@@ -40,6 +41,9 @@ def ver_inventario(inventario: list) -> None:
             print(f"Cantidad: {i.cantidad}")
             print(f"Precio: ${i.precio:.2f}")
             print("--------------------")
+            suma += i.precio * i.cantidad
+        print(f"Total en inventario: ${suma:.2f}")
+
 
 def agregar_stock(inventario: list) -> None:
     nombre = input("Ingrese el nombre del producto: ")
