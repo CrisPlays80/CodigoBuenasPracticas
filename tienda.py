@@ -1,3 +1,4 @@
+import time
 from producto import Producto as pr
 from os import system
 
@@ -12,21 +13,26 @@ def mostrar_menu() -> None:
     print("7. Mostrar stock de un producto")
     print("8. Salir")
 
-def agregar_producto(inventario: list) -> None:
+def agregar_producto(inventario: list, nombres: list) -> None:
     nombre = input("Ingrese el nombre del producto: ")
+    if nombre in nombres:
+        print("El producto ya existe en el inventario.")
+        return
     cantidad = int(input("Ingrese la cantidad inicial: "))
     precio = float(input("Ingrese el precio por unidad: "))
     inventario.append(pr(nombre, precio, cantidad))
+    nombres.append(nombre)
     print("Producto agregado exitosamente.")
 
-def quitar_producto(inventario: list) -> None:
+def quitar_producto(inventario: list, nombres: list) -> None:
     if len(inventario) == 0:
         print("El inventario está vacío.")
     else:
-        nombre = input("Ingrese el nombre del producto a eliminar: ")
+        nombre = input("Ingrese el nombre del producto a eliminar: ").lower()
         for i, producto in enumerate(inventario):
-            if producto.nombre_producto == nombre:
+            if producto.nombre_producto.lower() == nombre:
                 inventario.pop(i)
+                nombres.pop(nombre)
                 print(f"Producto {nombre} eliminado exitosamente.")
                 return
         print("Producto no encontrado.")
@@ -46,76 +52,88 @@ def ver_inventario(inventario: list) -> None:
 
 
 def agregar_stock(inventario: list) -> None:
-    nombre = input("Ingrese el nombre del producto: ")
+    nombre = input("Ingrese el nombre del producto: ").lower()
     cantidad = int(input("Ingrese la cantidad a agregar: "))
     for producto in inventario:
-        if producto.nombre_producto == nombre:
+        if producto.nombre_producto.lower() == nombre:
             producto.agregar_stock(cantidad)
-            print(f"Stock agregado exitosamente al producto {nombre}.")
             return
     print("Producto no encontrado.")
 
 def quitar_stock(inventario: list) -> None:
-    nombre = input("Ingrese el nombre del producto: ")
+    nombre = input("Ingrese el nombre del producto: ").lower()
     cantidad = int(input("Ingrese la cantidad a quitar: "))
     for producto in inventario:
-        if producto.nombre_producto == nombre:
+        if producto.nombre_producto.lower() == nombre:
             producto.quitar_stock(cantidad)
-            print(f"Stock quitado exitosamente del producto {nombre}.")
             return
     print("Producto no encontrado.")
 
 def actualizar_precio(inventario: list) -> None:
-    nombre = input("Ingrese el nombre del producto: ")
+    nombre = input("Ingrese el nombre del producto: ").lower()
     nuevo_precio = float(input("Ingrese el nuevo precio: "))
     for producto in inventario:
-        if producto.nombre_producto == nombre:
+        if producto.nombre_producto.lower() == nombre:
             producto.actualizar_precio(nuevo_precio)
-            print(f"Precio actualizado exitosamente del producto {nombre}.")
-            return
+            break
     print("Producto no encontrado.")
 
 def mostrar_stock_producto(inventario: list) -> None:
-    nombre = input("Ingrese el nombre del producto: ")
+    nombre = input("Ingrese el nombre del producto: ").lower()
     for producto in inventario:
-        if producto.nombre_producto == nombre:
+        if producto.nombre_producto.lower() == nombre:
             producto.ver_stock()
             return
     print("Producto no encontrado.")
 
 def controlInventario() -> None:
     inventario = []
+    nombres = []
     while True:
         system("cls")
         mostrar_menu()
-        opcion = int(input("Ingrese una opción: "))
+        try:
+            opcion = int(input("Ingrese una opción: "))
+        except ValueError:
+            print("Opción inválida. Intente de nuevo. Espere")
+            time.sleep(1.5)
+            continue
+
         match(opcion):
             case 1:
-                agregar_producto(inventario)
+                agregar_producto(inventario, nombres)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 2:
-                quitar_producto(inventario)
+                quitar_producto(inventario, nombres)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 3:
                 ver_inventario(inventario)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 4:
                 agregar_stock(inventario)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 5:
                 quitar_stock(inventario)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 6:
                 actualizar_precio(inventario)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 7:
                 mostrar_stock_producto(inventario)
                 input("Presione enter para continuar...")
+                time.sleep(0.5)
             case 8:
                 print("Gracias por utilizar el programa.")
                 break
             case _:
-                print("Opción inválida. Intente de nuevo.")
+                print("Opción no encontrada en el menu. Intente de nuevo.")
+                time.sleep(1)
 
 if __name__ == "__main__":
     controlInventario()

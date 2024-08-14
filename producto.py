@@ -1,6 +1,6 @@
 class Producto:
     def __init__(self, nombre_producto, precio, cantidad):
-        self.nombre_producto = nombre_producto.lower()
+        self.nombre_producto = nombre_producto
         self.precio = precio
         self.cantidad = cantidad
 
@@ -9,7 +9,7 @@ class Producto:
         print(f"Se agregaron {cantidad} unidades de {self.nombre_producto} al stock.")
 
     def quitar_stock(self, cantidad):
-        if not self.cantidad:
+        if self.cantidad >= 0:
             self.cantidad -= cantidad
             print(f"Se quitaron {cantidad} unidades de {self.nombre_producto} del stock.")
         else:
